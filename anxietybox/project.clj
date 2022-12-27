@@ -15,7 +15,7 @@
                   [environ "1.0.0"]
                                         ; project.clj
                   ]
-  :plugins [[lein-ring "0.9.0"]]
+  :plugins [[lein-ring "0.12.5"]]
   :ring {:handler anxietybox.handler/app}
   :resource-paths ["src/resources"]
   )
