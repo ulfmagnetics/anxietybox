@@ -10,7 +10,8 @@
                   [garden "1.2.5"]
                   [clj-http "1.0.1"]
                   [cheshire "5.4.0"]
-                  [com.taoensso/timbre "4.10.0"]
+                  [com.taoensso/timbre "4.10.0"
+                    :exclusions [org.clojure/tools.reader]]
                   [lein-environ "1.0.0"]
                   [environ "1.0.0"]
                                         ; project.clj
@@ -18,7 +19,11 @@
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler anxietybox.handler/app}
   :resource-paths ["src/resources"]
+
+  :profiles {:dev {
+                    :dependencies [
+                                    [ring-mock "0.1.5"]
+                                    [javax.servlet/servlet-api "2.5"]
+                                    ]}}
   )
 
-;; :profiles {:dev [[javax.servlet/servlet-api "2.5"]
-;;                     [ring-mock "0.1.5"]]}
