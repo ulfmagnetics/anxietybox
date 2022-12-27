@@ -162,7 +162,7 @@ form();
 
 (defroutes app-routes
 
-  (GET "/" [] (info "home page hit") (make-home))
+  (GET "/" [] (make-home))
 
   (POST "/" {params :params}
     (let [errors (check-params params)

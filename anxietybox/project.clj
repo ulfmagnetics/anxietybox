@@ -5,7 +5,7 @@
                   [compojure "1.3.1"]
                   [org.clojure/java.jdbc "0.3.6"]
                   [enlive "1.1.5"]
-                  [postgresql/postgresql "8.4-702.jdbc4"]
+                  [org.postgresql/postgresql "42.5.1"]
                   [hiccup "1.0.5"]
                   [garden "1.2.5"]
                   [clj-http "1.0.1"]
