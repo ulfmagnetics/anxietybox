@@ -116,3 +116,4 @@
   (map anxiety-enhance (sql/query pg ["SELECT * from box where active=?" true])))
 
 ;(boxes-for-update)
+;(info (box-select "ulfmagnetics@gmail.com"))

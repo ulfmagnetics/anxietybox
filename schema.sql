@@ -1,15 +1,11 @@
-DROP TABLE IF EXISTS account CASCADE;
+DROP TABLE IF EXISTS box CASCADE;
 DROP TABLE IF EXISTS anxiety CASCADE;
 DROP TABLE IF EXISTS reply CASCADE;
 
-DROP TABLE IF EXISTS accounts CASCADE;
-DROP TABLE IF EXISTS anxieties CASCADE;
-DROP TABLE IF EXISTS replies CASCADE;
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- The account of a user
-CREATE TABLE accounts (
+-- A user's box (i.e. account)
+CREATE TABLE box (
        created_time TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
        id SERIAL PRIMARY KEY,
        name VARCHAR(100) NOT NULL,
@@ -19,24 +15,24 @@ CREATE TABLE accounts (
        active BOOLEAN DEFAULT FALSE
 );
 
-CREATE UNIQUE INDEX lower_email_index ON accounts (lower(email));
-CREATE UNIQUE INDEX confirm_index ON accounts (confirm);
+CREATE UNIQUE INDEX lower_email_index ON box (lower(email));
+CREATE UNIQUE INDEX confirm_index ON box (confirm);
 
 -- Track anxieties
-CREATE TABLE anxieties (
+CREATE TABLE anxiety (
        id SERIAL PRIMARY KEY,
-       account_id int REFERENCES accounts(id) ON DELETE CASCADE,
+       box_id int REFERENCES box(id) ON DELETE CASCADE,
        tracker uuid DEFAULT UUID_GENERATE_V4(),
        description text UNIQUE NOT NULL
 );
 
-CREATE UNIQUE INDEX track_index ON accounts (confirm);
+CREATE UNIQUE INDEX track_index ON box (confirm);
 
 -- Track replies
-CREATE TABLE replies (
+CREATE TABLE reply (
        created_time TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
        id SERIAL PRIMARY KEY,
-       account_id int REFERENCES accounts(id),
-       anxiety_id int REFERENCES anxieties(id) ON DELETE CASCADE,
+       box_id int REFERENCES box(id),
+       anxiety_id int REFERENCES anxiety(id) ON DELETE CASCADE,
        description text
 );
