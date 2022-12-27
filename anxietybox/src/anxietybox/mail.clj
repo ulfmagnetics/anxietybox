@@ -6,9 +6,9 @@
     [clj-http.client :as client]))
 
 (timbre/refer-timbre)
-(timbre/set-config! [:appenders :spit :enabled?] true)
+(timbre/set-config! {:appenders {:spit (timbre/spit-appender {:enabled? true})}})
 ;; TODO put this in env.
-(timbre/set-config! [:shared-appender-config :spit-filename] "/Users/ford/Desktop/logs/clojure.log")
+;(timbre/set-config! [:shared-appender-config :spit-filename] "/Users/ford/Desktop/logs/clojure.log")
 
 (def mailgun-auth ["api" (env/env :mailgun-api-key)])
 (def mailgun-site "anxietybox.com")

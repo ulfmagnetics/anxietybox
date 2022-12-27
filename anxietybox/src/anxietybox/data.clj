@@ -6,8 +6,8 @@
 
 ;; Logging prefix
 (timbre/refer-timbre)
-(timbre/set-config! [:appenders :spit :enabled?] true)
-(timbre/set-config! [:shared-appender-config :spit-filename] (env/env :log-file))
+(timbre/set-config! {:appenders {:spit (timbre/spit-appender {:enabled? true})}})
+;(timbre/set-config! [:shared-appender-config :spit-filename] (env/env :log-file))
 ;;
 
 (defn uuid
@@ -31,7 +31,7 @@
 
 (defn box-insert
   [box]
-  (log "[box]" box)
+  (info "[box]" box)
   (try
     (let [db-box (first (sql/insert! pg "box" (dissoc box :project)))]
       (doall (map (partial anxiety-insert db-box) (:project box)))
