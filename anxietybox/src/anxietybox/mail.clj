@@ -1,14 +1,15 @@
 (ns anxietybox.mail
   (:require
-    [environ.core :as env]    
-    [taoensso.timbre :as timbre]    
-    [anxietybox.bot :as bot]    
+    [environ.core :as env]
+    [taoensso.timbre :as timbre]
+    [taoensso.timbre.appenders.core :as appenders]
+    [anxietybox.bot :as bot]
     [clj-http.client :as client]))
 
 (timbre/refer-timbre)
 (timbre/set-config!
  {:level :debug
-  :appenders {:spit2 (appenders/spit-appender {:fname "/Users/john/Downloads/logs/anxietybox.log"})}}
+  :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
  )
 
 (def mailgun-auth ["api" (env/env :mailgun-api-key)])

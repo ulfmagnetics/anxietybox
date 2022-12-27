@@ -1,6 +1,7 @@
 (ns anxietybox.handler
   (:use compojure.core)
   (:require
+    [environ.core :as env]
     [taoensso.timbre :as timbre]
     [taoensso.timbre.appenders.core :as appenders]
     [anxietybox.data :as data]
@@ -17,7 +18,7 @@
 (timbre/refer-timbre)
 (timbre/set-config!
   {:level :debug
-   :appenders {:spit2 (appenders/spit-appender {:fname "/Users/john/Downloads/logs/anxietybox.log"})}}
+   :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
  )
 
 (def site-prefix "http://localhost:3000/")

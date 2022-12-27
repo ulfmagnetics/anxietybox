@@ -1,0 +1,10 @@
+; Remove this line and copy this file to profiles.clj, then update the values
+{:dev
+    {:env
+        {:mailgun-api-key "the-mailgun-api-key"
+        :log-file "/Users/JohnMcCarthy/anxietybox/logs/clojure.log"
+        :postgres-database "anxietybox"
+        :postgres-user "horacepippin"
+        :postgres-password "dominos"}
+    }
+}

@@ -1,14 +1,15 @@
 (ns anxietybox.data
   (:require
     [environ.core :as env]
-    [taoensso.timbre :as timbre]    
+    [taoensso.timbre :as timbre]
+    [taoensso.timbre.appenders.core :as appenders]
     [clojure.java.jdbc :as sql]))
 
 ;; Logging prefix
 (timbre/refer-timbre)
 (timbre/set-config!
  {:level :debug
-  :appenders {:spit2 (appenders/spit-appender {:fname "/Users/john/Downloads/logs/anxietybox.log"})}}
+  :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
  )
 
 (defn uuid

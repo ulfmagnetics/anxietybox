@@ -12,18 +12,24 @@
                   [cheshire "5.4.0"]
                   [com.taoensso/timbre "4.10.0"
                     :exclusions [org.clojure/tools.reader]]
-                  [lein-environ "1.0.0"]
-                  [environ "1.0.0"]
-                                        ; project.clj
+                  [environ "1.1.0"]
                   ]
-  :plugins [[lein-ring "0.12.5"]]
+  :plugins [[lein-ring "0.12.5"]
+            [lein-environ "1.1.0"]
+            [lein-pprint "1.3.2"]
+            ]
   :ring {:handler anxietybox.handler/app}
   :resource-paths ["src/resources"]
 
-  :profiles {:dev {
-                    :dependencies [
-                                    [ring-mock "0.1.5"]
-                                    [javax.servlet/servlet-api "2.5"]
-                                    ]}}
+  :profiles {:dev [:project/dev :profiles/dev]
+             :test [:project/test :profiles/test]
+             ;; only edit :profiles/* in profiles.clj
+             :profiles/dev  {}
+             :profiles/test {}
+             :project/dev {:dependencies [
+                             [ring-mock "0.1.5"]
+                             [javax.servlet/servlet-api "2.5"]
+                           ]}
+             :project/test {}}
   )
 
