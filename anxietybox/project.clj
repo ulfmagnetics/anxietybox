@@ -1,7 +1,7 @@
 (defproject anxietybox "0.1.0-SNAPSHOT"
   :description "Code for Anxietybox.com"
   :url "http://anxietybox.com/source"
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                   [compojure "1.3.1"]
                   [org.clojure/java.jdbc "0.3.6"]
                   [enlive "1.1.5"]
