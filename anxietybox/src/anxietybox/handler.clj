@@ -1,7 +1,8 @@
 (ns anxietybox.handler
   (:use compojure.core)
   (:require
-    [taoensso.timbre :as timbre]    
+    [taoensso.timbre :as timbre]
+    [taoensso.timbre.appenders.core :as appenders]
     [anxietybox.data :as data]
     [anxietybox.style :as style] 
     [anxietybox.bot :as bot]
@@ -14,8 +15,10 @@
 
 ;; Logging prefix
 (timbre/refer-timbre)
-(timbre/set-config! {:appenders {:spit (timbre/spit-appender {:enabled? true})}})
-;(timbre/set-config! [:shared-appender-config :spit-filename] (env/env :log-file))
+(timbre/set-config!
+  {:level :debug
+   :appenders {:spit2 (appenders/spit-appender {:fname "/Users/john/Downloads/logs/anxietybox.log"})}}
+ )
 
 (def site-prefix "http://localhost:3000/")
 
@@ -158,11 +161,12 @@ form();
 
 (defroutes app-routes
 
-  (GET "/" [] (make-home))
+  (GET "/" [] (info "home page hit") (make-home))
 
   (POST "/" {params :params}
     (let [errors (check-params params)
            id (data/uuid)]
+
       (info params errors id)
       (if (not= errors ())
         

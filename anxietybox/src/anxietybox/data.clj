@@ -6,9 +6,10 @@
 
 ;; Logging prefix
 (timbre/refer-timbre)
-(timbre/set-config! {:appenders {:spit (timbre/spit-appender {:enabled? true})}})
-;(timbre/set-config! [:shared-appender-config :spit-filename] (env/env :log-file))
-;;
+(timbre/set-config!
+ {:level :debug
+  :appenders {:spit2 (appenders/spit-appender {:fname "/Users/john/Downloads/logs/anxietybox.log"})}}
+ )
 
 (defn uuid
   "Generate a UUID.
