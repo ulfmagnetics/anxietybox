@@ -13,10 +13,10 @@
                   [com.taoensso/timbre "4.10.0"
                     :exclusions [org.clojure/tools.reader]]
                   [environ "1.1.0"]
+                  [com.draines/postal "2.0.5"]
                   ]
   :plugins [[lein-ring "0.12.5"]
             [lein-environ "1.1.0"]
-            [lein-pprint "1.3.2"]
             ]
   :ring {:handler anxietybox.handler/app}
   :resource-paths ["src/resources"]

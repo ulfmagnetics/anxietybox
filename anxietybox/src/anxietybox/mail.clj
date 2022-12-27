@@ -1,9 +1,11 @@
 (ns anxietybox.mail
   (:require
     [environ.core :as env]
+    [postal.core :as postal]
     [taoensso.timbre :as timbre]
     [taoensso.timbre.appenders.core :as appenders]
     [anxietybox.bot :as bot]
+    [anxietybox.data :as data]
     [clj-http.client :as client]))
 
 (timbre/refer-timbre)
@@ -12,45 +14,46 @@
   :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
  )
 
-(def mailgun-auth ["api" (env/env :mailgun-api-key)])
-(def mailgun-site "anxietybox.com")
-(def mailgun-uri (str "https://api.mailgun.net/v2/" mailgun-site "/messages"))
-(def from-email "Your Anxiety <anxiety@anxietybox.com>")
-(def closing "\n\nSincerely,\n\nYour Anxiety\n\nhttp://anxietybox.com // http://twitter.com/anxietyboxbot")
+(def smtp-host "email-smtp.us-east-1.amazonaws.com")
+(def smtp-port 587)
+(def from-email "Your Anxiety <anxietybox@ulfmag.net>")
+(def closing "\n\nSincerely,\n\nYour Anxiety\n\nhttp://anxietybox.ulfmag.net")
 
-(defn mailgun-send 
-  "Post an email to the mailgun gateway."
+(defn postal-send
+  "Send an email via Amazon SES using postal"
   [form]
   (info form)
-  (client/post mailgun-uri
-    {:basic-auth mailgun-auth
-      :throw-entire-message? true
-      :form-params (merge {:from from-email} form)}))
+  (postal/send-message {:user (env/env :smtp-username)
+                        :pass (env/env :smtp-password)
+                        :host smtp-host
+                        :port smtp-port}
+                       (merge {:from from-email} form))
+)
 
 (defn send-confirmation
   ""
   [box]
   (info box)
-  (mailgun-send { :to (:email box)
+  (postal-send { :to (:email box)
           :subject "Confirmation requested"
-          :text (str "Dear " (:name box) ",
+          :body (str "Dear " (:name box) ",
 \nYou just signed up for Anxietybox.com. Click here to confirm your email:
 \n\thttp://anxietybox.com/activate/" (:confirm box) "
 \nIf you didn't sign up, ignore this email." closing)}))
 
 (defn send-reminder [box]
-  (mailgun-send { :to (:email box)
+  (postal-send { :to (:email box)
           :subject "Account information"
-          :text (str "Dear " (:name box) ",
+          :body (str "Dear " (:name box) ",
 \nClick here to delete your account:
 \n\thttp://anxietybox.com/delete/" (:confirm box) "
 \nYou can start a new account any time." closing)}))
 
 (defn anxiety-text [box]
   (str "Dear " (:name box) ",\n\n"
-    (bot/compose 
-      (if (:anxieties box) (:description (rand-nth (:anxieties box))))
-      (if (:reply box) (:description (rand-nth (:replies box)))))
+    (bot/compose
+      (if (seq (:anxieties box)) (:description (rand-nth (:anxieties box))))
+      (if (seq (:replies box)) (:description (rand-nth (:replies box)))))
     closing
     "\n\nP.S. Click here to delete your account:"
     "\n\thttp://anxietybox.com/delete/"
@@ -59,9 +62,9 @@
     ))
 
 (defn send-anxiety [box]
-  (mailgun-send { :to (:email box)
+  (postal-send { :to (:email box)
           :subject (bot/ps)
-          :text (anxiety-text box)}))
+          :body (anxiety-text box)}))
 
 
 ;(send-anxiety (data/box-select "ford@ftrain.com"))
