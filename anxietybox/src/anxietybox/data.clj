@@ -21,6 +21,7 @@
 
 (def pg {:subprotocol "postgresql"
           :subname "anxietybox"
+          :host (env/env :postgres-hostname)
           :user (env/env :postgres-user)
           :password (env/env :postgres-password)
           :stringtype "unspecified"})

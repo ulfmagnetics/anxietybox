@@ -1,5 +1,6 @@
 FROM java11:latest
 ENV LOG_FILE=/app/logs/clojure.log
+ENV POSTGRES_HOSTNAME=please_override_me
 ENV POSTGRES_USER=anxietybox
 ENV POSTGRES_PASSWORD=please_override_me
 ENV DOMAIN_NAME=your.anxiety.box

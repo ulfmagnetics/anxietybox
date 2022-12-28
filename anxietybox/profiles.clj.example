@@ -2,6 +2,7 @@
 {:dev
     {:env
         {:log-file "/Users/JohnMcCarthy/anxietybox/logs/clojure.log"
+        :postgres-hostname "localhost"
         :postgres-database "anxietybox"
         :postgres-user "john"
         :postgres-password ""
