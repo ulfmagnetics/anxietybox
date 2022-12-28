@@ -14,15 +14,18 @@
   :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
  )
 
+(defn construct-url [path]
+  (str "https://" (env/env :domain-name) "/" path))
+
 (def smtp-host "email-smtp.us-east-1.amazonaws.com")
 (def smtp-port 587)
-(def from-email "Your Anxiety <anxietybox@ulfmag.net>")
-(def closing "\n\nSincerely,\n\nYour Anxiety\n\nhttp://anxietybox.ulfmag.net")
+(def from-email (env/env :from-email))
+(def closing (str "\n\nSincerely,\n\nYour Anxiety\n\n" (construct-url "")))
 
 (defn postal-send
   "Send an email via Amazon SES using postal"
   [form]
-  (info form)
+  (info (merge {:from from-email} form))
   (postal/send-message {:user (env/env :smtp-username)
                         :pass (env/env :smtp-password)
                         :host smtp-host
@@ -37,8 +40,9 @@
   (postal-send { :to (:email box)
           :subject "Confirmation requested"
           :body (str "Dear " (:name box) ",
-\nYou just signed up for Anxietybox.com. Click here to confirm your email:
-\n\thttp://anxietybox.com/activate/" (:confirm box) "
+\nYou just signed up for " (construct-url "") ".
+Click here to confirm your email:
+\n\t" (construct-url (str "activate/" (:confirm box))) "
 \nIf you didn't sign up, ignore this email." closing)}))
 
 (defn send-reminder [box]
@@ -46,7 +50,7 @@
           :subject "Account information"
           :body (str "Dear " (:name box) ",
 \nClick here to delete your account:
-\n\thttp://anxietybox.com/delete/" (:confirm box) "
+\n\t" construct-url(str("delete/" (:confirm box))) "
 \nYou can start a new account any time." closing)}))
 
 (defn anxiety-text [box]
@@ -56,8 +60,7 @@
       (if (seq (:replies box)) (:description (rand-nth (:replies box)))))
     closing
     "\n\nP.S. Click here to delete your account:"
-    "\n\thttp://anxietybox.com/delete/"
-    (:confirm box) 
+    "\n\t" (construct-url (str "delete/" (:confirm box)))
     "\nYou can start a new account any time."
     ))
 
