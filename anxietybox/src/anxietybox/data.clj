@@ -45,7 +45,7 @@
   (sql/insert! pg "reply" reply))
 
 (defn reply-select [confirm]
-  (let [box-id (:id (first (sql/query pg ["select id from box where confirm = ?" confirm])))]
+  (let [box-id (:id (first (sql/query pg ["select id from box where confirm::text = ?" confirm])))]
     (sql/query pg ["select * from reply where box_id = ? ORDER BY created_time DESC" box-id])))
 
 (defn reply-select-by-box [box]
@@ -66,7 +66,7 @@
   (box-relate
     (first
       (sql/query pg
-        ["select * from box where confirm=?" confirm]))))
+        ["select * from box where confirm::text = ?" confirm]))))
 
 (defn box-select
   "Fetch a full record for a box.
@@ -96,7 +96,7 @@
 (defn toggle-block [code bool]
   (sql/update! pg "box"
     {:active bool :confirm (uuid)}
-    ["confirm=?" code]))
+    ["confirm::text = ?" code]))
 
 (defn box-activate
   [code]
@@ -108,7 +108,7 @@
 
 (defn box-delete
   [code]
-  (sql/delete! pg "box" ["confirm=?" code]))
+  (sql/delete! pg "box" ["confirm::text = ?" code]))
 
 (defn anxiety-enhance [box]
   (merge box {:anxieties (anxiety-select box)}))
