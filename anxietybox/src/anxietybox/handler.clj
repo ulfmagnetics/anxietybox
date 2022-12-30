@@ -18,7 +18,9 @@
 (timbre/refer-timbre)
 (timbre/set-config!
   {:level :debug
-   :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
+   :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})
+                :println2 (appenders/println-appender)}
+   }
  )
 
 (defn nest
@@ -160,7 +162,11 @@ form();
 
 (defroutes app-routes
 
-  (GET "/" [] (make-home))
+  (GET "/"
+       {:keys [headers params body] :as request}
+       (info (str "home page hit: " headers))
+       (make-home)
+   )
 
   (POST "/" {params :params}
     (let [errors (check-params params)

@@ -9,7 +9,9 @@
 (timbre/refer-timbre)
 (timbre/set-config!
  {:level :debug
-  :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
+  :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})
+              :println2 (appenders/println-appender)}
+  }
  )
 
 (defn uuid
