@@ -20,13 +20,11 @@
    =>#uuid \"f6411771-a11e-40ed-acc8-a844ca2e59cd\"" 
   [] (java.util.UUID/randomUUID))
 
-
-(def pg {:subprotocol "postgresql"
-          :subname "anxietybox"
-          :host (env/env :postgres-hostname)
-          :user (env/env :postgres-user)
-          :password (env/env :postgres-password)
-          :stringtype "unspecified"})
+(def pg {:dbtype "postgresql"
+         :dbname "anxietybox"
+         :host (env/env :postgres-hostname)
+         :user (env/env :postgres-user)
+         :password (env/env :postgres-password)})
 
 (defn anxiety-insert
   ""
@@ -64,7 +62,7 @@
 
 (defn box-select-by-confirm
   [confirm]
-  (prn confirm)
+  (info confirm)
   (box-relate
     (first
       (sql/query pg
