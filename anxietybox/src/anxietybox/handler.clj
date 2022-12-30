@@ -18,8 +18,7 @@
 (timbre/refer-timbre)
 (timbre/set-config!
   {:level :debug
-   :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})
-                :println2 (appenders/println-appender)}
+   :appenders {:println2 (appenders/println-appender)}
    }
  )
 
