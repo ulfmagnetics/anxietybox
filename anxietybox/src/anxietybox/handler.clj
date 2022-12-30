@@ -189,7 +189,7 @@ form();
                              (html/html
                               [:div#main        
                                [:h1 "Anxiety Received"]
-                               [:h2 "We received your anxiety, so at least you are able to fill out a form. Look for a confirmation email from anxiety@anxietybox.com"]])))
+                               [:h2 (str "We received your anxiety, so at least you are able to fill out a form. Look for a confirmation email from " (env/env :from-email))]])))
                 (do
                   (mail/send-reminder (data/box-insert params))
                   (make-page "Anxiety Box: Duplicate account"
