@@ -7,6 +7,8 @@ ENV DOMAIN_NAME=your.anxiety.box
 ENV SMTP_USERNAME=please_override_me
 ENV SMTP_PASSWORD=please_override_me
 ENV FROM_EMAIL="Your Anxiety <anxietybox@example.com>"
+ENV PORT=80
+ENV SSLPORT=443
 
 RUN apt-get -y update && apt-get -y full-upgrade
 
@@ -20,4 +22,4 @@ RUN cd /usr/local/bin && \
 
 COPY anxietybox/ /app
 WORKDIR /app
-CMD ["lein", "ring", "server"]
+CMD ["lein", "ring", "server-headless"]

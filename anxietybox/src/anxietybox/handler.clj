@@ -21,8 +21,6 @@
    :appenders {:spit2 (appenders/spit-appender {:fname (env/env :log-file)})}}
  )
 
-(def site-prefix "http://localhost:3000/")
-
 (defn nest
   "Take a key-value map and nest it by splitting on dashes.
 
