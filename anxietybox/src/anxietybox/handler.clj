@@ -9,6 +9,7 @@
     [anxietybox.bot :as bot]
     [anxietybox.mail :as mail]
     [clojure.string :as string]
+    [clojure.pprint :as pprint]
     [compojure.handler :as handler]
     [compojure.route :as route]
     [cheshire.core :as cheshire]    
@@ -121,7 +122,7 @@ form();
                          {:href "http://twitter.com/anxietyboxbot"}
                          "@anxietyboxbot" ]]]]
                  [:form
-                   {:id "signup" :method "post" :action "/"}
+                   {:id "signup" :method "post" :action "/sign-up"}
                    [:div#info
                      [:p "Stop making yourself anxious&mdash;that's
                      our job! <b>Fill out the form to the left and
@@ -161,13 +162,12 @@ form();
 
 (defroutes app-routes
 
-  (GET "/"
-       {:keys [headers params body] :as request}
-       (info (str "home page hit: " headers))
-       (make-home)
-   )
+  (GET "/" [] (make-home))
 
-  (POST "/" {params :params}
+  ; FIXME: why does API Gateway transform POSTs into GETs?
+  (ANY "/sign-up"
+    {:keys [request-method headers params body] :as request}
+    (info (str request-method " /sign-up " headers " " params " " body))
     (let [errors (check-params params)
            id (data/uuid)]
 
@@ -245,7 +245,13 @@ form();
                        :description (:stripped-text params)})))})
 
   (route/resources "/")
-  (route/not-found "Not Found"))
+
+  (ANY "*"
+     {:keys [request-method headers params body] :as request}
+     (info (str "404 Not Found " request-method " " headers " " params " " body))
+     "Page Not Found"
+   )
+  )
 
 (def app
   (handler/site app-routes))
