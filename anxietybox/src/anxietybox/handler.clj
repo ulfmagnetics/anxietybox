@@ -100,7 +100,7 @@ form();
       [:script {:src "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"}]
       [:style {:type "text/css"} style/css]      
       [:script (make-js params)]
-     [:link {:href "http://fonts.googleapis.com/css?family=Gentium+Basic:400,400italic,700,700italic|Alfa+Slab+One|Akronim" :rel "stylesheet" :type "text/css"}] 
+     [:link {:href "https://fonts.googleapis.com/css?family=Gentium+Basic:400,400italic,700,700italic|Alfa+Slab+One|Akronim" :rel "stylesheet" :type "text/css"}]
      [:meta {:type "charset"}]
      [:title title]
       [:body body
