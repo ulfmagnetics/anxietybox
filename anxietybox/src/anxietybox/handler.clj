@@ -255,6 +255,3 @@ form();
 
 (def app
   (handler/site app-routes))
-
-;(mail/send-anxiety (data/box-select "ford@ftrain.com"))
-;(map mail/send-anxiety (data/boxes-for-update))

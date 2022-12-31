@@ -26,7 +26,6 @@
 (defn postal-send
   "Send an email via Amazon SES using postal"
   [form]
-  (info (merge {:from from-email} form))
   (postal/send-message {:user (env/env :smtp-username)
                         :pass (env/env :smtp-password)
                         :host smtp-host
@@ -70,8 +69,6 @@ Click here to confirm your email:
           :subject (bot/ps)
           :body (anxiety-text box)}))
 
-
-;(send-anxiety (data/box-select "ford@ftrain.com"))
 
 
 
