@@ -64,10 +64,10 @@ var values=
 $('input.field').bind('focus click', function(s){ 
         $(this).addClass('visited');
         $(this).attr('value','');
-}); 
+});
 
-$('#submit').submit(function() {
-  $('div#anxieties-wrapper:last-child').delete();
+$('form').submit(function(e) {
+  $('form input.field:last-child').remove();
   return true;
 });
 
