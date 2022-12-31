@@ -74,7 +74,7 @@
                "okay so"
                "the upshot is"
                "the thing that matters is:"
-               "the fact to not here is,"
+               "the fact to note here is,"
                "can you tell me: "
                "are you ready to answer: "
                "look at it like this:"
@@ -269,6 +269,7 @@
    anxiety
    "\"--"
    (rand-nth interrogatories)
+   " "
    (make-reply reply)
    (ucfirst (rand-nth returns))
    " "
