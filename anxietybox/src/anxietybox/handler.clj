@@ -10,6 +10,7 @@
     [anxietybox.mail :as mail]
     [clojure.string :as string]
     [clojure.pprint :as pprint]
+    [clojure.data.json :as json]
     [compojure.handler :as handler]
     [compojure.route :as route]
     [cheshire.core :as cheshire]    
@@ -231,18 +232,25 @@ form();
       :body (map mail/send-anxiety (data/boxes-for-update))})
 
 
-  ; Receives mailgun posts
-  (POST "/receive" {params :params} 
-        {:headers {"Content-Type" "application/json;charset=UTF-8"}
-         :body  (cheshire/generate-string
-                 (do (data/reply-insert 
-                      {:box_id 
-                       (:id  (let [box (data/box-select (:sender params))]
-                               (if box box 
-                                   (let [conf
-                                         (drop 1 (re-find #"/delete/([\S\"]+)" (:body-plain params)))]
-                                     (if conf (data/box-select-by-confirm (first conf)))))))
-                       :description (:stripped-text params)})))})
+  ; Receives Amazon SNS posts containing emails that we received
+  ; FIXME: why does API Gateway transform POSTs into GETs?
+  (ANY "/receive"
+       {:keys [request-method headers params body] :as request}
+       (let [sns (json/read-str (slurp (:body request)))]
+         (let [message (json/read-str (get sns "Message"))]
+           (let [sender (get-in message ["mail" "source"])
+                 content (get message "content")
+                 confirm (drop 1 (re-find #"/delete/([\S\"]+)" content))]
+             (info (str "sender: " sender ", confirm: ", (first confirm)))
+             {:headers {"Content-Type" "application/json;charset=UTF-8"}
+              :body (cheshire/generate-string
+                     (do data/reply-insert
+                       {:box_id
+                        (:id (let [box (data/box-select sender)]
+                               (if box box
+                                 (if confirm (data/box-select-by-confirm (first confirm))))))
+                        :description content}))} ; TODO: parse the message and strip out garbage
+             ))))
 
   (route/resources "/")
 
